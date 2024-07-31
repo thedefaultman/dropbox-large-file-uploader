@@ -38,17 +38,16 @@ fi
 totalFileSize=$(wc -c <"$INPUT_FILE_PATH")
 chunkSize=150000000  # 150 MB
 
-# Split the file into chunks
+# Split the file into chunks using BusyBox-compatible syntax
 chunkDir="chunks"
 if [ ! -d "${chunkDir}" ]; then
   mkdir ${chunkDir}
 fi
-split -db ${chunkSize} "$INPUT_FILE_PATH" ./${chunkDir}/
-cd ${chunkDir}
+split -b ${chunkSize} "$INPUT_FILE_PATH" ./${chunkDir}/chunk_
 
 # Upload chunks to Dropbox
 offset=0
-for file in `ls -tU *`
+for file in $(ls -v ./${chunkDir}/)  # -v for natural sort order in BusyBox
 do
   response=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
     --header "Authorization: Bearer ${apiToken}" \
