@@ -13,7 +13,7 @@ This action uploads large files to Dropbox using the Dropbox API, handling file 
 ## Example Usage
 
 ```yaml
-uses: your-username/dropbox-large-file-uploader@v1
+uses: thedefaultman/dropbox-large-file-uploader@v1
 with:
   app_key: ${{ secrets.DROPBOX_APP_KEY }}
   app_secret: ${{ secrets.DROPBOX_APP_SECRET }}
