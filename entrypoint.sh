@@ -40,13 +40,22 @@ fi
 # Upload remaining chunks
 OFFSET=$CHUNK_SIZE
 while [ $OFFSET -lt $FILE_SIZE ]; do
-  curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
+  RESPONSE=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
     --header "Authorization: Bearer $ACCESS_TOKEN" \
     --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"$SESSION_ID\", \"offset\": $OFFSET}, \"close\": false}" \
     --header "Content-Type: application/octet-stream" \
-    --data-binary @<(tail -c +$((OFFSET + 1)) "$INPUT_FILE_PATH" | head -c $CHUNK_SIZE)
-  OFFSET=$((OFFSET + CHUNK_SIZE))
+    --data-binary @<(tail -c +$((OFFSET + 1)) "$INPUT_FILE_PATH" | head -c $CHUNK_SIZE))
+  
+  # Check if the response contains an error
+  if echo "$RESPONSE" | grep -q "incorrect_offset"; then
+    CORRECT_OFFSET=$(echo "$RESPONSE" | jq -r '.error.lookup_failed.correct_offset')
+    OFFSET=$CORRECT_OFFSET
+    echo "Incorrect offset detected. Adjusting to correct offset: $OFFSET"
+  else
+    OFFSET=$((OFFSET + CHUNK_SIZE))
+  fi
 done
+
 
 # Finish the upload session
 curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/finish \
