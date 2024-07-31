@@ -22,7 +22,7 @@ fi
 
 # File to upload
 FILE_SIZE=$(stat -c%s "$INPUT_FILE_PATH")
-CHUNK_SIZE=157286400  # 150 MB
+CHUNK_SIZE=150000000  # 150 MB
 
 # Start the upload session
 SESSION_ID=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/start \
