@@ -4,6 +4,7 @@ author: "Defaultman"
 runs:
   using: "docker"
   image: "Dockerfile"
+  entrypoint: "/entrypoint.sh"
 
 inputs:
   app_key:
