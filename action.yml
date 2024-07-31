@@ -1,0 +1,27 @@
+name: "Dropbox Large File Uploader"
+description: "A GitHub Action to upload large files to Dropbox using a refresh token."
+author: "Defaultman"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+inputs:
+  app_key:
+    description: "Dropbox API app key."
+    required: true
+  app_secret:
+    description: "Dropbox API app secret."
+    required: true
+  refresh_token:
+    description: "Dropbox API refresh token."
+    required: true
+  file_path:
+    description: "Path to the file to upload."
+    required: true
+  dropbox_path:
+    description: "Destination path in Dropbox."
+    required: true
+
+branding:
+  icon: "package"
+  color: "blue"
