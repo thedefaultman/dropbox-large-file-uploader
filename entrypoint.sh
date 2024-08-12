@@ -55,14 +55,7 @@ do
     --header "Content-Type: application/octet-stream" \
     --data-binary @"$file")
 
-  # Handle incorrect offset error by retrying with the correct offset
-  if echo "$response" | grep -q "incorrect_offset"; then
-    correct_offset=$(echo "$response" | jq -r '.error.lookup_failed.correct_offset')
-    echo "Incorrect offset detected. Adjusting to correct offset: $correct_offset"
-    offset=$correct_offset
-  else
-    offset=$((offset + 150000000))
-  fi
+  offset=$((offset + 150000000))
 done
 
 # Finalize the upload session
