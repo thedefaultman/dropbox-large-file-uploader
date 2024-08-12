@@ -34,7 +34,7 @@ if [ -z "$sessionId" ]; then
   exit 1
 fi
 
-# Calculate file size and define chunk size
+# Calculate file size
 totalFileSize=$(wc -c <"$INPUT_FILE_PATH")
 
 # Split the file into chunks
@@ -47,7 +47,7 @@ cd ${chunkDir}
 
 # Upload chunks to Dropbox
 offset=0
-for file in `ls -t *`
+for file in `ls -l *`
 do
   response=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
     --header "Authorization: Bearer ${apiToken}" \
