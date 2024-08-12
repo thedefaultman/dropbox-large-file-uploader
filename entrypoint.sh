@@ -36,14 +36,13 @@ fi
 
 # Calculate file size and define chunk size
 totalFileSize=$(wc -c <"$INPUT_FILE_PATH")
-chunkSize=150000000  # 150 MB
 
 # Split the file into chunks
 chunkDir="chunks"
 if [ ! -d "${chunkDir}" ]; then
   mkdir ${chunkDir}
 fi
-split -b ${chunkSize} "$INPUT_FILE_PATH" ./${chunkDir}/
+split -b 150000000 "$INPUT_FILE_PATH" ./${chunkDir}/
 cd ${chunkDir}
 
 # Upload chunks to Dropbox
@@ -62,7 +61,7 @@ do
     echo "Incorrect offset detected. Adjusting to correct offset: $correct_offset"
     offset=$correct_offset
   else
-    offset=$((offset + chunkSize))
+    offset=$((offset + 150000000))
   fi
 done
 
