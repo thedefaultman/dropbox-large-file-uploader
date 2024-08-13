@@ -1,6 +1,7 @@
 # Dropbox Large File Uploader GitHub Action
 
 This action uploads large files to Dropbox using the Dropbox API, handling file uploads in chunks and managing OAuth 2.0 tokens.
+I've had to go through many iteration of this for the sake of learning my mistakes. Please use the latest release. It should work :) 
 
 ## Inputs
 
