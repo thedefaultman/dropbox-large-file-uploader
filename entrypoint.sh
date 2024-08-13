@@ -49,19 +49,21 @@ cd ${chunkDir}
 offset=0
 for file in `ls -l *`
 do
+  fileSize=$(stat -c%s "$file")
+  
   response=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
     --header "Authorization: Bearer ${apiToken}" \
     --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"close\": false}" \
     --header "Content-Type: application/octet-stream" \
     --data-binary @"$file")
 
-  offset=$((offset + 150000000))
+  offset=$((offset + fileSize))
 done
 
 # Finalize the upload session
 curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/finish \
   --header "Authorization: Bearer ${apiToken}" \
-  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${totalFileSize}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
+  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
   --header "Content-Type: application/octet-stream"
 
 # Clean up the chunk directory
