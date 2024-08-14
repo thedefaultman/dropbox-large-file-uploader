@@ -14,7 +14,7 @@ I've had to go through many iteration of this for the sake of learning my mistak
 ## Example Usage
 
 ```yaml
-uses: thedefaultman/dropbox-large-file-uploader@v1
+uses: thedefaultman/dropbox-large-file-uploader@v2.3.5
 with:
   app_key: ${{ secrets.DROPBOX_APP_KEY }}
   app_secret: ${{ secrets.DROPBOX_APP_SECRET }}
