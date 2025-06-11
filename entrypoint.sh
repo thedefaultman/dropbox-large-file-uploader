@@ -21,10 +21,12 @@ if [[ -z "$INPUT_APP_KEY" || -z "$INPUT_APP_SECRET" || -z "$INPUT_REFRESH_TOKEN"
 fi
 
 if [[ -z "$INPUT_WRITE_MODE" ]]; then
-  input_mode = 'add'
+  input_mode='add'
 else
-  input_mode = "$INPUT_WRITE_MODE"
+  input_mode="$INPUT_WRITE_MODE"
 fi
+
+echo "Mode is: $input_mode"
 
 # Obtain the access token
 get_access_token
