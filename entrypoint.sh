@@ -55,7 +55,7 @@ cd ${chunkDir}
 
 # Upload chunks to Dropbox
 offset=0
-for file in `ls -l *`
+for file in *
 do
   echo "$file"
   fileSize=$(stat -c%s "$file")
