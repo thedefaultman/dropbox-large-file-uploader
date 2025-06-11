@@ -22,9 +22,14 @@ inputs:
     description: "Destination path in Dropbox."
     required: true
   write_mode:
-    description: "Write mode is one of 'add', 'overwrite', or 'update' as defined in https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish
+    description: "Write mode is one of 'add', 'overwrite', or 'update' as defined in https://www.dropbox.com/developers/documentation/http/documentation#files-upload_session-finish"
     required: false
+    type: choice
     default: 'add'
+    options:
+      - 'add'
+      - 'overwrite'
+      - 'update'
 
 branding:
   icon: "package"
