@@ -69,7 +69,7 @@ done
 # Finalize the upload session
 curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/finish \
   --header "Authorization: Bearer ${apiToken}" \
-  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"$input_mode\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
+  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"${input_mode}\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
   --header "Content-Type: application/octet-stream"
 
 # Clean up the chunk directory
