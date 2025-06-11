@@ -57,6 +57,7 @@ cd ${chunkDir}
 offset=0
 for file in `ls -l *`
 do
+  echo "$file"
   fileSize=$(stat -c%s "$file")
   
   response=$(curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/append_v2 \
