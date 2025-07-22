@@ -20,6 +20,14 @@ if [[ -z "$INPUT_APP_KEY" || -z "$INPUT_APP_SECRET" || -z "$INPUT_REFRESH_TOKEN"
   exit 1
 fi
 
+if [[ -z "$INPUT_WRITE_MODE" ]]; then
+  input_mode='add'
+else
+  input_mode="$INPUT_WRITE_MODE"
+fi
+
+echo "Mode is: $input_mode"
+
 # Obtain the access token
 get_access_token
 
@@ -47,7 +55,7 @@ cd ${chunkDir}
 
 # Upload chunks to Dropbox
 offset=0
-for file in `ls -l *`
+for file in *
 do
   fileSize=$(stat -c%s "$file")
   
@@ -63,7 +71,7 @@ done
 # Finalize the upload session
 curl -s -X POST https://content.dropboxapi.com/2/files/upload_session/finish \
   --header "Authorization: Bearer ${apiToken}" \
-  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"add\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
+  --header "Dropbox-API-Arg: {\"cursor\": {\"session_id\": \"${sessionId}\",\"offset\": ${offset}},\"commit\": {\"path\": \"${INPUT_DROPBOX_PATH}\",\"mode\": \"${input_mode}\",\"autorename\": true,\"mute\": false,\"strict_conflict\": false}}" \
   --header "Content-Type: application/octet-stream"
 
 # Clean up the chunk directory
