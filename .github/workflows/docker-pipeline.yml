@@ -1,0 +1,54 @@
+name: Deploy to Fly.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Fly.io CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Create fly.toml if not exists
+        run: |
+          if [ ! -f fly.toml ]; then
+            cat > fly.toml << EOF
+          app = "dropbox-large-file-uploader"
+          primary_region = "iad"
+
+          [build]
+            dockerfile = "Dockerfile"
+
+          [http_service]
+            internal_port = ${{ secrets.PORT || '3000' }}
+            force_https = true
+            auto_stop_machines = true
+            auto_start_machines = true
+            min_machines_running = 0
+            processes = ["app"]
+
+          [[vm]]
+            memory = "1gb"
+            cpu_kind = "shared"
+            cpus = 1
+
+          [env]
+            NODE_ENV = "production"
+          EOF
+          fi
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only --wait-timeout=600
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: Output deployment info
+        run: |
+          echo "App deployed successfully!"
+          echo "Visit your app at: https://dropbox-large-file-uploader.fly.dev"
